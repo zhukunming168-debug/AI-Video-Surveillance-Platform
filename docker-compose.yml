@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend/surveillance_backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - backend_data:/app/src/database
+      - ai_detections:/tmp/ai_detections
+      - streams:/tmp/streams
+    environment:
+      FLASK_APP: src/main.py
+      FLASK_ENV: development
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: ./frontend/surveillance-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:
+  ai_detections:
+  streams:
+
